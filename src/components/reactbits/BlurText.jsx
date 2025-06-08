@@ -1,6 +1,5 @@
 import { motion } from 'framer-motion';
 import { useEffect, useRef, useState, useMemo } from 'react';
-import { type BlurTextProps } from "@/interfaces/BlurText";
 
 
 const buildKeyframes = (from, steps) => {
@@ -29,7 +28,7 @@ const BlurText = ({
   easing = (t) => t,
   onAnimationComplete,
   stepDuration = 0.35,
-}) :BlurTextProps => {
+}) => {
   const elements = animateBy === 'words' ? text.split(' ') : text.split('');
   const [inView, setInView] = useState(false);
   const ref = useRef(null);

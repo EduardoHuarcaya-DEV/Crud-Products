@@ -1,4 +1,4 @@
-import BlurText from "@/components/reactbits/BlurText";
+import BlurText from "@components/reactbits/BlurText";
 import GridMotion from "@components/reactbits/GridMotion";
 import { items } from "@/lib/GridMotion";
 import LoginForm from "@/auth/LoginForm";
