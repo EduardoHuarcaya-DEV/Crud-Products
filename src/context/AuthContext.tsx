@@ -4,7 +4,6 @@ import type { LoginFormData } from "@/interfaces/auth.interface";
 import type { AuthState, User } from "@/interfaces/auth.interface";
 import api from "@/api/api";
 
-
 // Crear el context de autenticacion
 
 const AuthContext = createContext({} as AuthState);
@@ -23,35 +22,45 @@ export const useAuth = () => {
 
 export const AuthProvider = ({ children }: PropsWithChildren) => {
   // Estados para la autenticacion
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [user, setUser] = useState<User>();
-  const [loading, setLoading] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    return localStorage.getItem("isAuthenticated") === "true";
+  });
+  const [user, setUser] = useState<User | undefined>(() => {
+    const userData = localStorage.getItem("user");
+    return userData ? JSON.parse(userData) : undefined;
+  });
+  const [loading, setLoading] = useState(false);
 
   const Login = async (data: LoginFormData) => {
     try {
       setLoading(true);
       const response = await api.post("/auth/login", data);
-      const { token, user } = response.data;
-
-      //Almacenar el token en local estorage
-      localStorage.setItem("token", token);
+      const { token, usuario } = response.data;
 
       //Actualizar el estado global
-      setUser(user);
+      setUser(usuario);
       setIsAuthenticated(true);
+
+      //Almacenar el token en local storage
+      localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(usuario));
+      localStorage.setItem("isAuthenticated", "true");
     } catch (err) {
       console.error(err);
       setIsAuthenticated(false);
       setUser(undefined);
-    }finally{
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      localStorage.setItem("isAuthenticated", "false");
+    } finally {
       setLoading(false);
     }
   };
 
   const Logout = () => {
     localStorage.removeItem("token");
-    setUser(undefined);
     setIsAuthenticated(false);
+    setUser(undefined);
   };
 
   return (

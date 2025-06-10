@@ -9,6 +9,7 @@ const LoginForm = () => {
     register,
     handleSubmit,
     formState: { errors },
+    formState: { isSubmitting },
   } = useForm<LoginFormData>();
 
   const onSubmit = (data: LoginFormData) => {
@@ -51,8 +52,9 @@ const LoginForm = () => {
         )}
       </div>
       <div>
-        <button className="p-3 w-full rounded-lg bg-blue-500 text-white font-bold cursor-pointer hover:bg-blue-600 transition-all duration-200">
-          Iniciar Sesión
+        <button className="p-3 w-full rounded-lg bg-blue-500 text-white font-bold cursor-pointer hover:bg-blue-600 transition-all duration-200"
+        disabled={isSubmitting}>
+          {isSubmitting ? "Cargando..." : "Inciar Sesion"}
         </button>
       </div>
     </form>
