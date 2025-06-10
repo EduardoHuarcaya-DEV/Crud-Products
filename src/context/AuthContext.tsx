@@ -35,6 +35,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     try {
       setLoading(true);
       const response = await api.post("/auth/login", data);
+      // Data que me devuelve el backend en el auth controller
       const { token, usuario } = response.data;
 
       //Actualizar el estado global
